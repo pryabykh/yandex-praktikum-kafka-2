@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.Properties;
 import java.util.UUID;
 
-import static com.pryabykh.yandex_praktikum_kafka_2.constant.KafkaConstants.MESSAGES_TOPIC_NAME;
+import static com.pryabykh.yandex_praktikum_kafka_2.constant.KafkaConstants.ALL_MESSAGES_TOPIC_NAME;
 
 @Component
 public class MessageProducer {
@@ -46,7 +46,7 @@ public class MessageProducer {
     public void sendMessage(MessageDto messageDto) {
         String message = messageMapper.serialize(messageDto);
         ProducerRecord<String, String> record = new ProducerRecord<>(
-                MESSAGES_TOPIC_NAME,
+                ALL_MESSAGES_TOPIC_NAME,
                 UUID.randomUUID().toString(),
                 message
         );
