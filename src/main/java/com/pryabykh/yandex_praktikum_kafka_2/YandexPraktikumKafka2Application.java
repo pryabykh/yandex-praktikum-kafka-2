@@ -1,4 +1,4 @@
-package com.pryabykh.yandex_praktikum_kafka_1;
+package com.pryabykh.yandex_praktikum_kafka_2;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,7 +1,7 @@
-package com.pryabykh.yandex_praktikum_kafka_1.controller;
+package com.pryabykh.yandex_praktikum_kafka_2.controller;
 
-import com.pryabykh.yandex_praktikum_kafka_1.dto.MessageDto;
-import com.pryabykh.yandex_praktikum_kafka_1.producer.MessageProducer;
+import com.pryabykh.yandex_praktikum_kafka_2.dto.MessageDto;
+import com.pryabykh.yandex_praktikum_kafka_2.producer.MessageProducer;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;

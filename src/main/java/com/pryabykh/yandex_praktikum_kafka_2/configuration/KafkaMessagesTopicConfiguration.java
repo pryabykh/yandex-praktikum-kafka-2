@@ -1,4 +1,4 @@
-package com.pryabykh.yandex_praktikum_kafka_1.configuration;
+package com.pryabykh.yandex_praktikum_kafka_2.configuration;
 
 import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
-import static com.pryabykh.yandex_praktikum_kafka_1.constant.KafkaConstants.MESSAGES_TOPIC_NAME;
+import static com.pryabykh.yandex_praktikum_kafka_2.constant.KafkaConstants.MESSAGES_TOPIC_NAME;
 
 @Component
 public class KafkaMessagesTopicConfiguration implements CommandLineRunner {

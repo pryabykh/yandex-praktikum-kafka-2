@@ -1,6 +1,6 @@
-package com.pryabykh.yandex_praktikum_kafka_1.dto;
+package com.pryabykh.yandex_praktikum_kafka_2.dto;
 
-import com.pryabykh.yandex_praktikum_kafka_1.constant.FixedUsers;
+import com.pryabykh.yandex_praktikum_kafka_2.constant.FixedUsers;
 
 public class MessageDto {
 

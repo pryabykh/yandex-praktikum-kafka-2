@@ -1,7 +1,7 @@
-package com.pryabykh.yandex_praktikum_kafka_1.producer;
+package com.pryabykh.yandex_praktikum_kafka_2.producer;
 
-import com.pryabykh.yandex_praktikum_kafka_1.dto.MessageDto;
-import com.pryabykh.yandex_praktikum_kafka_1.mapper.MessageMapper;
+import com.pryabykh.yandex_praktikum_kafka_2.dto.MessageDto;
+import com.pryabykh.yandex_praktikum_kafka_2.mapper.MessageMapper;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.Properties;
 import java.util.UUID;
 
-import static com.pryabykh.yandex_praktikum_kafka_1.constant.KafkaConstants.MESSAGES_TOPIC_NAME;
+import static com.pryabykh.yandex_praktikum_kafka_2.constant.KafkaConstants.MESSAGES_TOPIC_NAME;
 
 @Component
 public class MessageProducer {

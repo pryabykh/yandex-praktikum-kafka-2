@@ -1,4 +1,4 @@
-package com.pryabykh.yandex_praktikum_kafka_1.constant;
+package com.pryabykh.yandex_praktikum_kafka_2.constant;
 
 public class KafkaConstants {
 

@@ -1,8 +1,8 @@
-package com.pryabykh.yandex_praktikum_kafka_1.mapper;
+package com.pryabykh.yandex_praktikum_kafka_2.mapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pryabykh.yandex_praktikum_kafka_1.dto.MessageDto;
+import com.pryabykh.yandex_praktikum_kafka_2.dto.MessageDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

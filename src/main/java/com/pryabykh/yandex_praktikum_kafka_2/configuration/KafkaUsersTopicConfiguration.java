@@ -1,6 +1,6 @@
-package com.pryabykh.yandex_praktikum_kafka_1.configuration;
+package com.pryabykh.yandex_praktikum_kafka_2.configuration;
 
-import com.pryabykh.yandex_praktikum_kafka_1.constant.FixedUsers;
+import com.pryabykh.yandex_praktikum_kafka_2.constant.FixedUsers;
 import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
-import static com.pryabykh.yandex_praktikum_kafka_1.constant.KafkaConstants.USERS_TOPIC_NAME;
+import static com.pryabykh.yandex_praktikum_kafka_2.constant.KafkaConstants.USERS_TOPIC_NAME;
 
 @Component
 public class KafkaUsersTopicConfiguration implements CommandLineRunner {
