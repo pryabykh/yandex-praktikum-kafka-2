@@ -13,15 +13,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Properties;
-import java.util.UUID;
 
-import static com.pryabykh.yandex_praktikum_kafka_2.constant.KafkaConstants.ALL_MESSAGES_TOPIC_NAME;
+import static com.pryabykh.yandex_praktikum_kafka_2.constant.KafkaConstants.BLOCKED_USERS_TOPIC_NAME;
 
 @Component
-public class MessageProducer {
-    private static final Logger log = LoggerFactory.getLogger(MessageProducer.class);
+public class BlockedUsersProducer {
+    private static final Logger log = LoggerFactory.getLogger(BlockedUsersProducer.class);
     @Autowired
     private MessageMapper messageMapper;
     private KafkaProducer producer;
@@ -43,15 +43,14 @@ public class MessageProducer {
         this.producer = new KafkaProducer<>(properties);
     }
 
-    public void sendMessage(MessageDto messageDto) {
-        String message = messageMapper.serialize(messageDto);
+    public void blockUser(String blocker, String blocked) {
         ProducerRecord<String, String> record = new ProducerRecord<>(
-                ALL_MESSAGES_TOPIC_NAME,
-                messageDto.getTo().name(),
-                message
+                BLOCKED_USERS_TOPIC_NAME,
+                blocker,
+                blocked
         );
         producer.send(record);
-        log.info("➕Сообщение {} отправлено в очередь", messageDto);
+        log.info("Действие пользователь {} блокирует {} поставлено в очередь", blocker, blocked);
     }
 
     @PreDestroy

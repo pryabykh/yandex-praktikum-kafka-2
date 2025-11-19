@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
-import static com.pryabykh.yandex_praktikum_kafka_2.constant.KafkaConstants.USERS_BLOCK_LIST_TOPIC_NAME;
+import static com.pryabykh.yandex_praktikum_kafka_2.constant.KafkaConstants.BLOCKED_USERS_TOPIC_NAME;
 
 @Component
 public class KafkaBlockListTopicConfiguration implements CommandLineRunner {
@@ -23,9 +23,9 @@ public class KafkaBlockListTopicConfiguration implements CommandLineRunner {
     @Override
     public void run(String... args) {
         try (Admin admin = Admin.create(Collections.singletonMap("bootstrap.servers", bootstrapServers))) {
-            NewTopic newTopic = new NewTopic(USERS_BLOCK_LIST_TOPIC_NAME, 3, (short) 2);
+            NewTopic newTopic = new NewTopic(BLOCKED_USERS_TOPIC_NAME, 3, (short) 2);
             admin.createTopics(Collections.singleton(newTopic)).all().get();
-            log.info("Топик {} успешно создан!", USERS_BLOCK_LIST_TOPIC_NAME);
+            log.info("Топик {} успешно создан!", BLOCKED_USERS_TOPIC_NAME);
         } catch (ExecutionException | InterruptedException e) {
             if (e instanceof ExecutionException && e.getCause() instanceof TopicExistsException) {
                 log.info("Топик уже существует. Создание будет проигнорировано");

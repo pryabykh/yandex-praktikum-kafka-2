@@ -1,6 +1,11 @@
 package com.pryabykh.yandex_praktikum_kafka_2.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pryabykh.yandex_praktikum_kafka_2.constant.FixedUsers;
+import io.swagger.v3.oas.annotations.Hidden;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class MessageDto {
 
@@ -9,6 +14,9 @@ public class MessageDto {
     private FixedUsers.User to;
 
     private String content;
+
+    @Hidden
+    private Set<String> blockedUsers = new HashSet<>();
 
     public MessageDto() {
     }
@@ -45,10 +53,18 @@ public class MessageDto {
 
     @Override
     public String toString() {
-        return "MessageDto{" +
+        return "{" +
                 "from=" + from +
                 ", to=" + to +
                 ", content='" + content + '\'' +
                 '}';
+    }
+
+    public Set<String> getBlockedUsers() {
+        return blockedUsers;
+    }
+
+    public void setBlockedUsers(Set<String> blockedUsers) {
+        this.blockedUsers = blockedUsers;
     }
 }
