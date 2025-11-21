@@ -1,5 +1,6 @@
 package com.pryabykh.yandex_praktikum_kafka_2.controller;
 
+import com.pryabykh.yandex_praktikum_kafka_2.component.CensorComponent;
 import com.pryabykh.yandex_praktikum_kafka_2.constant.FixedUsers;
 import com.pryabykh.yandex_praktikum_kafka_2.dto.MessageDto;
 import com.pryabykh.yandex_praktikum_kafka_2.producer.BlockedUsersProducer;
@@ -18,10 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class MessageController {
     private final MessageProducer messageProducer;
     private final BlockedUsersProducer blockedUsersProducer;
+    private final CensorComponent censorComponent;
 
-    public MessageController(MessageProducer messageProducer, BlockedUsersProducer blockedUsersProducer) {
+    public MessageController(MessageProducer messageProducer,
+                             BlockedUsersProducer blockedUsersProducer,
+                             CensorComponent censorComponent) {
         this.messageProducer = messageProducer;
         this.blockedUsersProducer = blockedUsersProducer;
+        this.censorComponent = censorComponent;
     }
 
     @PostMapping(value = "/send-message")
@@ -40,5 +45,12 @@ public class MessageController {
     public ResponseEntity<?> sendMessage(@RequestParam FixedUsers.User blocker, @RequestParam FixedUsers.User blocked) {
         blockedUsersProducer.blockUser(blocker.name(), blocked.name());
         return ResponseEntity.ok("Сообщение принято к обработке");
+    }
+
+    @PostMapping(value = "/censor-add")
+    @Operation(summary = "Добавить строку в цензуру")
+    public ResponseEntity<?> censorAdd(@RequestParam String string) {
+        censorComponent.add(string);
+        return ResponseEntity.ok("Успешно добавлено");
     }
 }

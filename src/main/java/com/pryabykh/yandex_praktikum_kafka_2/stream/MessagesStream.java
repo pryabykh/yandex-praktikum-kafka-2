@@ -1,5 +1,6 @@
 package com.pryabykh.yandex_praktikum_kafka_2.stream;
 
+import com.pryabykh.yandex_praktikum_kafka_2.component.CensorComponent;
 import com.pryabykh.yandex_praktikum_kafka_2.dto.MessageDto;
 import com.pryabykh.yandex_praktikum_kafka_2.mapper.BlockedUsersMapper;
 import com.pryabykh.yandex_praktikum_kafka_2.mapper.MessageMapper;
@@ -8,6 +9,7 @@ import jakarta.annotation.PreDestroy;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStream;
@@ -33,19 +35,22 @@ public class MessagesStream {
     private static final String streamName = "messages-stream";
     private final BlockedUsersMapper blockedUsersMapper;
     private final MessageMapper messageMapper;
+    private final CensorComponent censorComponent;
     private KafkaStreams streams;
 
     @Value("${bootstrap.servers}")
     private String bootstrapServers;
 
-    public MessagesStream(BlockedUsersMapper blockedUsersMapper, MessageMapper messageMapper) {
+    public MessagesStream(BlockedUsersMapper blockedUsersMapper,
+                          MessageMapper messageMapper,
+                          CensorComponent censorComponent) {
         this.blockedUsersMapper = blockedUsersMapper;
         this.messageMapper = messageMapper;
+        this.censorComponent = censorComponent;
     }
 
     @PostConstruct
-    public void run() throws Exception {
-        ;
+    public void run() {
         Properties config = new Properties();
         config.put(StreamsConfig.APPLICATION_ID_CONFIG, streamName);
         config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
@@ -74,6 +79,7 @@ public class MessagesStream {
                     }
                     return true;
                 })
+                .map((k, v) -> KeyValue.pair(k, censorComponent.apply(v)))
                 .peek((k, v) -> log.info("\uD83E\uDD73Сообщение {} передано пользователю!!!", v))
                 .to(VALID_MESSAGES_TOPIC_NAME);
 
