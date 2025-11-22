@@ -24,10 +24,10 @@ import org.springframework.stereotype.Component;
 import java.util.Properties;
 import java.util.Set;
 
-import static com.pryabykh.yandex_praktikum_kafka_2.constant.KafkaConstants.ALL_MESSAGES_TOPIC_NAME;
+import static com.pryabykh.yandex_praktikum_kafka_2.constant.KafkaConstants.MESSAGES_TOPIC_NAME;
 import static com.pryabykh.yandex_praktikum_kafka_2.constant.KafkaConstants.BLOCKED_USERS_STORE_NAME;
 import static com.pryabykh.yandex_praktikum_kafka_2.constant.KafkaConstants.BLOCKED_USERS_TOPIC_NAME;
-import static com.pryabykh.yandex_praktikum_kafka_2.constant.KafkaConstants.VALID_MESSAGES_TOPIC_NAME;
+import static com.pryabykh.yandex_praktikum_kafka_2.constant.KafkaConstants.FILTERED_MESSAGES_TOPIC_NAME;
 
 @Component
 public class MessagesStream {
@@ -59,7 +59,7 @@ public class MessagesStream {
 
         StreamsBuilder builder = new StreamsBuilder();
 
-        KStream<String, String> stream = builder.stream(ALL_MESSAGES_TOPIC_NAME);
+        KStream<String, String> stream = builder.stream(MESSAGES_TOPIC_NAME);
 
         KTable<String, String> blockedUsersTable = createBlockedUsersTable(builder);
 
@@ -81,7 +81,7 @@ public class MessagesStream {
                 })
                 .map((k, v) -> KeyValue.pair(k, censorComponent.apply(v)))
                 .peek((k, v) -> log.info("\uD83E\uDD73Сообщение {} передано пользователю!!!", v))
-                .to(VALID_MESSAGES_TOPIC_NAME);
+                .to(FILTERED_MESSAGES_TOPIC_NAME);
 
         streams = new KafkaStreams(builder.build(), config);
         streams.start();

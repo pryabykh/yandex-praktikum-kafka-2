@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
-import static com.pryabykh.yandex_praktikum_kafka_2.constant.KafkaConstants.ALL_MESSAGES_TOPIC_NAME;
-import static com.pryabykh.yandex_praktikum_kafka_2.constant.KafkaConstants.VALID_MESSAGES_TOPIC_NAME;
+import static com.pryabykh.yandex_praktikum_kafka_2.constant.KafkaConstants.MESSAGES_TOPIC_NAME;
+import static com.pryabykh.yandex_praktikum_kafka_2.constant.KafkaConstants.FILTERED_MESSAGES_TOPIC_NAME;
 
 @Component
 public class KafkaMessagesTopicConfiguration implements CommandLineRunner {
@@ -25,9 +25,9 @@ public class KafkaMessagesTopicConfiguration implements CommandLineRunner {
     public void run(String... args) {
         //создаем топик, куда будут приходить ВСЕ сообщения
         try (Admin admin = Admin.create(Collections.singletonMap("bootstrap.servers", bootstrapServers))) {
-            NewTopic newTopic = new NewTopic(ALL_MESSAGES_TOPIC_NAME, 3, (short) 2);
+            NewTopic newTopic = new NewTopic(MESSAGES_TOPIC_NAME, 3, (short) 2);
             admin.createTopics(Collections.singleton(newTopic)).all().get();
-            log.info("Топик {} успешно создан!", ALL_MESSAGES_TOPIC_NAME);
+            log.info("Топик {} успешно создан!", MESSAGES_TOPIC_NAME);
         } catch (ExecutionException | InterruptedException e) {
             if (e instanceof ExecutionException && e.getCause() instanceof TopicExistsException) {
                 log.info("Топик уже существует. Создание будет проигнорировано");
@@ -38,9 +38,9 @@ public class KafkaMessagesTopicConfiguration implements CommandLineRunner {
 
         //создаем топик, куда будут приходить только ВАЛИДНЫЕ сообщения
         try (Admin admin = Admin.create(Collections.singletonMap("bootstrap.servers", bootstrapServers))) {
-            NewTopic newTopic = new NewTopic(VALID_MESSAGES_TOPIC_NAME, 3, (short) 2);
+            NewTopic newTopic = new NewTopic(FILTERED_MESSAGES_TOPIC_NAME, 3, (short) 2);
             admin.createTopics(Collections.singleton(newTopic)).all().get();
-            log.info("Топик {} успешно создан!", VALID_MESSAGES_TOPIC_NAME);
+            log.info("Топик {} успешно создан!", FILTERED_MESSAGES_TOPIC_NAME);
         } catch (ExecutionException | InterruptedException e) {
             if (e instanceof ExecutionException && e.getCause() instanceof TopicExistsException) {
                 log.info("Топик уже существует. Создание будет проигнорировано");

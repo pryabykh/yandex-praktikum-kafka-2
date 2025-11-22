@@ -1,6 +1,5 @@
 package com.pryabykh.yandex_praktikum_kafka_2.producer;
 
-import com.pryabykh.yandex_praktikum_kafka_2.dto.MessageDto;
 import com.pryabykh.yandex_praktikum_kafka_2.mapper.MessageMapper;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -13,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Properties;
 

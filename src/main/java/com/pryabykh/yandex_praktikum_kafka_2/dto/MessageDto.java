@@ -1,6 +1,5 @@
 package com.pryabykh.yandex_praktikum_kafka_2.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pryabykh.yandex_praktikum_kafka_2.constant.FixedUsers;
 import io.swagger.v3.oas.annotations.Hidden;
 
