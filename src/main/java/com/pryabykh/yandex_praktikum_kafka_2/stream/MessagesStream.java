@@ -51,6 +51,7 @@ public class MessagesStream {
 
     @PostConstruct
     public void run() {
+        // Создаем конфигурацию стрима
         Properties config = new Properties();
         config.put(StreamsConfig.APPLICATION_ID_CONFIG, streamName);
         config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
@@ -59,18 +60,26 @@ public class MessagesStream {
 
         StreamsBuilder builder = new StreamsBuilder();
 
+        // Подключаемся к топику с сообщениями
         KStream<String, String> stream = builder.stream(MESSAGES_TOPIC_NAME);
 
+        // Создаем KTable: по login пользователя можно получить список заблокированных для этого пользователя
         KTable<String, String> blockedUsersTable = createBlockedUsersTable(builder);
 
+        // Описываем действия внутри стрима
         stream
+                // Логируем все входящие сообщения
                 .peek((k, v) -> log.info("\uD83D\uDCA4Обработка сообщения : {}", v))
+
+                // Джоиним заблокированных юзеров к сообщению
                 .leftJoin(blockedUsersTable,
                         (message, blockedUsers) -> {
                             MessageDto messageDto = messageMapper.deserialize(message);
                             messageDto.setBlockedUsers(blockedUsersMapper.deserialize(blockedUsers));
                             return messageMapper.serialize(messageDto);
                         })
+
+                // Отфильтровываем сообщения, которые пришли от юзеров из списка заблокированных
                 .filter((k, v) -> {
                     MessageDto messageDto = messageMapper.deserialize(v);
                     if (messageDto.getBlockedUsers().contains(messageDto.getFrom().name())) {
@@ -79,10 +88,17 @@ public class MessagesStream {
                     }
                     return true;
                 })
+
+                // Применяем цензуру
                 .map((k, v) -> KeyValue.pair(k, censorComponent.apply(v)))
+
+                // Логируем сообщение перед отправкой в топик отфильтрованных сообщения
                 .peek((k, v) -> log.info("\uD83E\uDD73Сообщение {} передано пользователю!!!", v))
+
+                // Передаем сообещние в топик отфильтрованных
                 .to(FILTERED_MESSAGES_TOPIC_NAME);
 
+        // Создаем описанный сконфигурированных стрим и запускаем его
         streams = new KafkaStreams(builder.build(), config);
         streams.start();
 
@@ -96,8 +112,11 @@ public class MessagesStream {
     }
 
     private KTable<String, String> createBlockedUsersTable(StreamsBuilder builder) {
+        // Подключаемся к топику с заблокированными юзерами
         KStream<String, String> blockEvents = builder.stream(BLOCKED_USERS_TOPIC_NAME);
 
+        // Агрегируем сообщения из топика таким образом,
+        // чтобы в персистентом хранилище мы имели заблокированных юезров по login пользователя
         return blockEvents
                 .groupByKey()
                 .aggregate(
